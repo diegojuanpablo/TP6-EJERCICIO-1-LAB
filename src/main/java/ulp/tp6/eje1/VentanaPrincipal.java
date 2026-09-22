@@ -4,12 +4,15 @@
  */
 package ulp.tp6.eje1;
 
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+
 /**
  *
  * @author diego
  */
 public class VentanaPrincipal extends javax.swing.JFrame {
-    
+
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaPrincipal.class.getName());
 
     /**
@@ -44,10 +47,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         tabla_busqueda.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null},
-                {null, null, null},
-                {null, null, null},
-                {null, null, null}
+
             },
             new String [] {
                 "Nombre", "Categoria", "Precio"
@@ -71,6 +71,7 @@ public class VentanaPrincipal extends javax.swing.JFrame {
         boton_agregar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/carritos_compras.png"))); // NOI18N
         boton_agregar.setText("Agregar");
         boton_agregar.setHorizontalTextPosition(javax.swing.SwingConstants.RIGHT);
+        boton_agregar.addActionListener(this::boton_agregarActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -149,6 +150,51 @@ public class VentanaPrincipal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void boton_agregarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_boton_agregarActionPerformed
+        // TODO add your handling code here:
+        String nombre = celda_nombre.getText();
+        String precio = celda_precio.getText();
+        String categoria = celdabox_gestion.getSelectedItem().toString();
+
+        if (nombre.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese nombre del producto.");
+            return;
+        }
+
+        if (precio.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Ingrese precio del producto.");
+            return;
+        }
+
+        double precioProducto;
+
+        try {
+            precioProducto = Double.parseDouble(precio);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser un número.");
+            return;
+        }
+
+        if (precioProducto <= 0) {
+            JOptionPane.showMessageDialog(this, "El precio debe ser mayor que cero.");
+            return;
+        }
+
+        DefaultTableModel modelo = (DefaultTableModel) tabla_busqueda.getModel();
+
+        modelo.addRow(new Object[]{
+            nombre,
+            categoria,
+            precioProducto
+        });
+
+        celda_nombre.setText("");
+        celda_precio.setText("");
+
+        celda_nombre.requestFocus();
+
+    }//GEN-LAST:event_boton_agregarActionPerformed
 
     /**
      * @param args the command line arguments
